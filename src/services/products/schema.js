@@ -8,15 +8,7 @@ const productSchema = new Schema(
     imageUrl: String, //REQUIRED
     price: Number, //REQUIRED
     category: String,
-    reviews: [
-      {
-        comment: String,
-        rate: Number,
-      },
-      {
-        timestamps: true,
-      },
-    ],
+    reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
   },
   {
     timestamps: true,
@@ -24,3 +16,5 @@ const productSchema = new Schema(
 );
 
 module.exports = model("Product", productSchema);
+
+//reviews: object

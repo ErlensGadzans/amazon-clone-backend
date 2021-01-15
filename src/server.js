@@ -12,6 +12,7 @@ const {
   genericErrorHandler,
 } = require("./errorHandlers");
 const productsRouter = require("./services/products");
+const reviewsRouter = require("./services/products/reviews/index");
 
 const server = express();
 
@@ -21,6 +22,7 @@ server.use(express.json());
 server.use(cors());
 
 server.use("/products", productsRouter);
+server.use("/reviews", reviewsRouter);
 
 server.get("/", (req, res, next) => {
   res.send("Richards & Erlens server is running!");

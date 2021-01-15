@@ -34,7 +34,9 @@ productsRouter.get("/", async (req, res, next) => {
 
 productsRouter.get("/:id", async (req, res, next) => {
   try {
-    const product = await ProductModel.findById(req.params.id);
+    const product = await ProductModel.findById(req.params.id).populate(
+      "Review"
+    );
     res.status(200).send(product);
   } catch (error) {
     console.log(error);
@@ -77,94 +79,94 @@ productsRouter.put("/:id", async (req, res, next) => {
 
 //REVIEWS
 
-productsRouter.get("/:id/reviews", async (req, res, next) => {
-  try {
-    const reviews = await ProductModel.findById(req.params.id);
-    res.status(200).send(reviews);
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-});
+// productsRouter.get("/:id/reviews", async (req, res, next) => {
+//   try {
+//     const reviews = await ProductModel.findById(req.params.id);
+//     res.status(200).send(reviews);
+//   } catch (error) {
+//     console.log(error);
+//     next(error);
+//   }
+// });
 
-productsRouter.get("/:id/reviews/:reviewId", async (req, res, next) => {
-  try {
-    const { reviews } = await ProductModel.findOne(
-      { _id: mongoose.Types.ObjectId(req.params.id) }, //using mangoose to find object by id
-      {
-        reviews: {
-          $elemMatch: { _id: mongoose.Types.ObjectId(req.params.reviewId) },
-        },
-      }
-    );
-    res.status(200).send(reviews);
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-});
+// productsRouter.get("/:id/reviews/:reviewId", async (req, res, next) => {
+//   try {
+//     const { reviews } = await ProductModel.findOne(
+//       { _id: mongoose.Types.ObjectId(req.params.id) }, //using mangoose to find object by id
+//       {
+//         reviews: {
+//           $elemMatch: { _id: mongoose.Types.ObjectId(req.params.reviewId) },
+//         },
+//       }
+//     );
+//     res.status(200).send(reviews);
+//   } catch (error) {
+//     console.log(error);
+//     next(error);
+//   }
+// });
 
-productsRouter.post("/:id/reviews", async (req, res, next) => {
-  try {
-    const review = req.body;
-    const newReview = await ProductModel.findByIdAndUpdate(
-      req.params.id,
-      {
-        $push: { reviews: review },
-      },
-      { runValidators: true, new: true }
-    );
-    res.status(201).send({ newReview });
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-});
+// productsRouter.post("/:id/reviews", async (req, res, next) => {
+//   try {
+//     const review = req.body;
+//     const newReview = await ProductModel.findByIdAndUpdate(
+//       req.params.id,
+//       {
+//         $push: { reviews: review },
+//       },
+//       { runValidators: true, new: true }
+//     );
+//     res.status(201).send({ newReview });
+//   } catch (error) {
+//     console.log(error);
+//     next(error);
+//   }
+// });
 
-productsRouter.delete("/:id/reviews/:reviewId", async (req, res, next) => {
-  try {
-    const { reviews } = await ProductModel.findOneAndUpdate(
-      { _id: mongoose.Types.ObjectId(req.params.id) },
-      {
-        $pull: {
-          reviews: { _id: mongoose.Types.ObjectId(req.params.reviewId) },
-        },
-      }
-    );
-    res.status(204).send(reviews);
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-});
+// productsRouter.delete("/:id/reviews/:reviewId", async (req, res, next) => {
+//   try {
+//     const { reviews } = await ProductModel.findOneAndUpdate(
+//       { _id: mongoose.Types.ObjectId(req.params.id) },
+//       {
+//         $pull: {
+//           reviews: { _id: mongoose.Types.ObjectId(req.params.reviewId) },
+//         },
+//       }
+//     );
+//     res.status(204).send(reviews);
+//   } catch (error) {
+//     console.log(error);
+//     next(error);
+//   }
+// });
 
-productsRouter.put("/:id/reviews/:reviewId", async (req, res, next) => {
-  try {
-    const product = await ProductModel.findOne(
-      { _id: mongoose.Types.ObjectId(req.params.id) },
-      {
-        reviews: {
-          $elemMatch: { _id: mongoose.Types.ObjectId(req.params.reviewId) },
-        },
-      }
-    );
+// productsRouter.put("/:id/reviews/:reviewId", async (req, res, next) => {
+//   try {
+//     const product = await ProductModel.findOne(
+//       { _id: mongoose.Types.ObjectId(req.params.id) },
+//       {
+//         reviews: {
+//           $elemMatch: { _id: mongoose.Types.ObjectId(req.params.reviewId) },
+//         },
+//       }
+//     );
 
-    const reviewIndex = product.reviews.findIndex(
-      (review) => review._id.toString() === req.params.reviewId
-    );
+//     const reviewIndex = product.reviews.findIndex(
+//       (review) => review._id.toString() === req.params.reviewId
+//     );
 
-    const reviewInArray = product.reviews[reviewIndex];
+//     const reviewInArray = product.reviews[reviewIndex];
 
-    const updatedReview = { ...reviewInArray._doc, ...req.body };
+//     const updatedReview = { ...reviewInArray._doc, ...req.body };
 
-    product.reviews[reviewIndex] = updatedReview;
+//     product.reviews[reviewIndex] = updatedReview;
 
-    await product.update({ reviews: product.reviews });
-    res.status(204).send(product);
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-});
+//     await product.update({ reviews: product.reviews });
+//     res.status(204).send(product);
+//   } catch (error) {
+//     console.log(error);
+//     next(error);
+//   }
+// });
 
 module.exports = productsRouter;
