@@ -22,7 +22,8 @@ productsRouter.post("/", async (req, res, next) => {
 //GETTING ALL THE PRODUCTS
 productsRouter.get("/", async (req, res, next) => {
   try {
-    const products = await ProductModel.find(); //1) Requesting info about the products
+    const products = await ProductModel.find().populate("Review");
+    //1) Requesting info about the products
     res.send(products); //2) Receiving products data
   } catch (error) {
     console.log(error);
