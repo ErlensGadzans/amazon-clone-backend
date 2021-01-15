@@ -11,6 +11,7 @@ const {
   notAuthorized,
   genericErrorHandler,
 } = require("./errorHandlers");
+const productsRouter = require("./services/products");
 
 const server = express();
 
@@ -20,6 +21,8 @@ const port = process.env.PORT || 5077;
 
 server.use(express.json());
 server.use(cors());
+
+server.use("/products", productsRouter);
 
 server.get("/", (req, res, next) => {
   res.send("Richards & Erlens server is running!");
