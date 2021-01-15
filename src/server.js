@@ -4,16 +4,30 @@ const listEndpoints = require("express-list-endpoints");
 const cors = require("cors");
 const dotenv = require("dotenv");
 dotenv.config();
+const {
+  badRequestHandler,
+  notFoundHandler,
+  forbiddenHandler,
+  notAuthorized,
+  genericErrorHandler,
+} = require("./errorHandlers");
 
 const server = express();
 
 const port = process.env.PORT || 5077;
 
 server.use(express.json());
+server.use(cors());
 
 server.get("/", (req, res, next) => {
   res.send("Richards & Erlens server is running!");
 });
+
+server.use(badRequestHandler);
+server.use(notFoundHandler);
+server.use(forbiddenHandler);
+server.use(notAuthorized);
+server.use(genericErrorHandler);
 
 mongoose
   .connect(process.env.MONGO_CONNECTION, {
@@ -26,3 +40,5 @@ mongoose
     })
   )
   .catch((error) => console.log(error));
+
+console.log(listEndpoints(server));
