@@ -17,15 +17,45 @@ userRoute.post("/", async (req, res, next) => {
   }
 });
 
+userRoute.delete("/:id/add-to-cart/:id2", async (req, res, next) => {
+  try {
+    const theUser = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        $pull: { cart: { id_: mongoose.Types.ObjectId(req.params.id2) } },
+      },
+      {
+        runValidators: true,
+        new: true,
+        useFindAndModify: false,
+      }
+    );
+
+    if (theUser) {
+      res.status(201).send(theUser);
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
+
 userRoute.post("/:id/add-to-cart/:id2", async (req, res, next) => {
   try {
-    const User = await User.findByIdAndUpdate(req.params.id, {
-      $addToSet: { cart: req.params.id2 },
-    });
-    await newUser.save();
+    const theUser = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        $addToSet: { cart: req.params.id2 },
+      },
+      {
+        runValidators: true,
+        new: true,
+        useFindAndModify: false,
+      }
+    );
 
-    if (newUser) {
-      res.status(201).send(newUser);
+    if (theUser) {
+      res.status(201).send(theUser);
     }
   } catch (error) {
     console.log(error);
