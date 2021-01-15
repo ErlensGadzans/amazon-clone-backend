@@ -13,8 +13,11 @@ const {
 } = require("./errorHandlers");
 const productsRouter = require("./services/products");
 const reviewsRouter = require("./services/products/reviews/index");
+const userRoute = require("./services/products/user/index");
 
 const server = express();
+
+/* ADDED A CHANGE !!! */
 
 const port = process.env.PORT || 5077;
 
@@ -23,6 +26,7 @@ server.use(cors());
 
 server.use("/products", productsRouter);
 server.use("/reviews", reviewsRouter);
+server.use("/user", userRoute);
 
 server.get("/", (req, res, next) => {
   res.send("Richards & Erlens server is running!");
