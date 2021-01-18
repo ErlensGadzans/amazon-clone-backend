@@ -51,4 +51,27 @@ reviewsRouter.put("/:reviewId", async (req, res, next) => {
   }
 });
 
+// userRoute.post("/:id/add-to-cart/:id2", async (req, res, next) => {
+//   try {
+//     const theUser = await User.findByIdAndUpdate(
+//       req.params.id,
+//       {
+//         $addToSet: { cart: req.params.id2 },
+//       },
+//       {
+//         runValidators: true,
+//         new: true,
+//         useFindAndModify: false,
+//       }
+//     );
+
+//     if (theUser) {
+//       res.status(201).send(theUser);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     next(error);
+//   }
+// });
+
 module.exports = reviewsRouter;

@@ -17,4 +17,6 @@ const productSchema = new Schema(
 
 module.exports = model("Product", productSchema);
 
-//reviews: object
+/**
+ * WE CAN ADD A LITTLE TIMESTAMP BY CREATING A SUBSCHEMA IN OUR REVIEW
+ */
